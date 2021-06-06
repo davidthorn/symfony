@@ -1,0 +1,61 @@
+version: '3.8'
+
+networks:
+  shopping_network:
+    name: ${PREFIX}network
+
+services:
+
+  php:
+    container_name: ${PREFIX}php
+    build:
+      args:
+        - USER_ID
+      context: ./build
+      dockerfile: Dockerfile
+    volumes:
+      - ${APP_SOURCE}:${APP_WORKING_DIR}
+    networks:
+        - shopping_network
+    depends_on: 
+      - mysql
+  
+  nginx:
+      image: nginx:latest
+      container_name: ${PREFIX}nginx
+      volumes:
+        - ${APP_SOURCE}:${APP_WORKING_DIR}
+        - ./build/conf/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+        - ${NGINX_PORT}:80
+      networks:
+        - shopping_network
+      depends_on: 
+        - php
+
+  mysql:
+      image: mysql:${MYSQL_VERSION}
+      container_name: ${PREFIX}mysql
+      env_file:
+        - ./build/conf/mysql.env
+      volumes:
+        - db_data:/var/lib/mysql
+      ports:
+        - ${MYSQL_SERVICE_PORT}:3306
+      networks:
+        - shopping_network
+
+  admin:
+    image: phpmyadmin:latest
+    ports:
+      - ${PHPADMIN_SERVICE_PORT}:80
+    container_name: ${PREFIX}admin
+    env_file:
+      - ./build/conf/admin.env
+    networks:
+      - shopping_network
+    
+volumes:
+  db_data:
+    name: "${PREFIX}mysql_data"
+    
