@@ -23,4 +23,4 @@ WORKDIR /var/www/html
 
 USER www-data
 
-RUN composer create-project symfony/website-skeleton .
+RUN composer create-project symfony/website-skeleton:4.4.99 .

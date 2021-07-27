@@ -6,11 +6,11 @@ networks:
 
 services:
   php:
-    image: davidthorn/symfony:5.3.5
+    image: davidthorn/symfony:4.4.99
     user: www-data
     container_name: ${PREFIX}php
     volumes:
-      - ${APP_SOURCE}:${APP_WORKING_DIR}
+#      - ${APP_SOURCE}:${APP_WORKING_DIR}
       - ./build/conf/project.ini:/usr/local/etc/php/conf.d/project.ini
     networks:
         - symfony_network
