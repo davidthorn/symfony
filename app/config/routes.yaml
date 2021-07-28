@@ -14,3 +14,14 @@ account:
   prefix: '/account'
   type: annotation
   name_prefix: 'app_account_'
+
+auth:
+  resource: '../src/Controller/Frontend/Auth'
+  type: annotation
+  name_prefix: 'app_auth_'
+
+admin:
+  resource: '../src/Controller/Admin'
+  prefix: '/admin'
+  type: annotation
+  name_prefix: 'app_admin_'
