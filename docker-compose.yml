@@ -10,7 +10,7 @@ services:
     user: www-data
     container_name: ${PREFIX}php
     volumes:
-#      - ${APP_SOURCE}:${APP_WORKING_DIR}
+      - ${APP_SOURCE}:${APP_WORKING_DIR}
       - ./build/conf/project.ini:/usr/local/etc/php/conf.d/project.ini
     networks:
         - symfony_network
@@ -21,7 +21,7 @@ services:
       image: nginx:latest
       container_name: ${PREFIX}nginx
       environment:
-        - NGINX_HOST=david.springlane
+        - NGINX_HOST=${NGINX_HOST}
       volumes:
         - ${APP_SOURCE}:${APP_WORKING_DIR}
         - ./build/conf/nginx.conf:/etc/nginx/conf.d/default.conf
