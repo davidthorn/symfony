@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Access Denied!{% endblock %}
+
+{% block content %}
+    {% for message in app.flashes('note') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endblock %}
