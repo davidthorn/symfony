@@ -1,0 +1,16 @@
+api:
+  resource: '../src/Controller/Api/'
+  type: annotation
+  prefix: '/api'
+  name_prefix: 'app_api_'
+
+frontend:
+  resource: '../src/Controller/Frontend/Pages'
+  type: annotation
+  name_prefix: 'app_pages_'
+
+account:
+  resource: '../src/Controller/Frontend/Account'
+  prefix: '/account'
+  type: annotation
+  name_prefix: 'app_account_'

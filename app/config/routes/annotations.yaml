@@ -1,9 +1,3 @@
-api:
-  resource: '../src/Controller/Api/'
-  type: annotation
-  prefix: '/api'
-  name_prefix: 'api_'
-
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
