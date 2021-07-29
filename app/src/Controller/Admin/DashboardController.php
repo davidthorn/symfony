@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Security\Roles;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +22,8 @@ class DashboardController extends AbstractController
      */
     public function indexAction(): Response
     {
+        $this->denyAccessUnlessGranted(Roles::ADMIN);
+
         return $this->render('views/admin/dashboard.html.twig', []);
     }
 }
