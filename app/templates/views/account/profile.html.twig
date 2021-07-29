@@ -1,5 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'views/admin/base.html.twig' %}
 
-{% block content %}
+{% block sidebar %}
+    {% include 'includes/admin/sidebar.html.twig' with { title: 'Account' } %}
+{% endblock %}
+
+{% block admin_content %}
     <h1>This is account</h1>
 {% endblock %}
