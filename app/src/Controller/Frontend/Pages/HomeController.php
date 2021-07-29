@@ -2,10 +2,12 @@
 
 namespace App\Controller\Frontend\Pages;
 
+use App\Interfaces\HomeViewModelInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use App\Security\Roles;
 /**
  * Class HomeController
  *
@@ -13,6 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class HomeController extends AbstractController
 {
+    /**
+     * @var \App\Interfaces\HomeViewModelInterface
+     */
+    protected HomeViewModelInterface $viewModel;
+
+    /**
+     * HomeController constructor.
+     *
+     * @param \App\Interfaces\HomeViewModelInterface $viewModel
+     */
+    public function __construct(HomeViewModelInterface $viewModel)
+    {
+        $this->viewModel = $viewModel;
+    }
 
     /**
      * @Route("", name="home", methods={"GET"})
@@ -21,7 +37,9 @@ final class HomeController extends AbstractController
     public function indexAction(): Response
     {
         return $this->render('views/pages/home.html.twig', [
-            'data' => []
+            'data' => [],
+            'showAdmin' => $this->viewModel->isAdmin(),
+            'login_text' => $this->viewModel->getLoginButtonText()
         ]);
     }
 

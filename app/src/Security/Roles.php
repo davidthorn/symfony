@@ -9,6 +9,10 @@ namespace App\Security;
  */
 final class Roles
 {
+    /**
+     * The user is authenticated and registered.
+     */
+    public const USER = 'ROLE_USER';
 
     /**
      * The user should be able to access the admin area, but not all areas.

@@ -2,4 +2,15 @@
 
 {% block content %}
 <h1>This is home</h1>
+    <ul>
+        {% set route = app.user ? 'app_auth_logout' : 'app_auth_login' %}
+        <li>
+            <a href="{{ path(route) }}" title="{{ login_text }}">{{ login_text }}</a>
+        </li>
+        {% if showAdmin %}
+            <li>
+                <a href="{{ path('app_admin_dashboard') }}" title="Admin">Admin</a>
+            </li>
+        {% endif %}
+    </ul>
 {% endblock %}
