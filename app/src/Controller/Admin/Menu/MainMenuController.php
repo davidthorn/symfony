@@ -48,6 +48,10 @@ final class MainMenuController extends AbstractController
                     'title' => 'Home'
                 ],
                 [
+                    'link' => $this->generateUrl('app_admin_shopware_articles_list'),
+                    'title' => 'Articles'
+                ],
+                [
                     'link' => $this->generateUrl('app_admin_menus_list'),
                     'title' => 'Menus'
                 ],

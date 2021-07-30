@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.6'
 
 networks:
   symfony_network:
@@ -16,6 +16,7 @@ services:
         - symfony_network
     depends_on: 
       - mysql
+      - shopware
   
   nginx:
       image: nginx:latest
@@ -44,6 +45,18 @@ services:
       networks:
         - symfony_network
 
+  shopware:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${PREFIX}sw_mysql
+    env_file:
+      - ./build/conf/shopware.env
+    volumes:
+      - shopware_db_data:/var/lib/mysql
+    ports:
+      - ${SW_MYSQL_SERVICE_PORT}:3306
+    networks:
+      - symfony_network
+
   admin:
     image: phpmyadmin:latest
     ports:
@@ -57,4 +70,6 @@ services:
 volumes:
   symfony_db_data:
     name: "${PREFIX}mysql_data"
+  shopware_db_data:
+    name: "${PREFIX}sw_mysql_data"
     

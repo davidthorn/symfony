@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -55,19 +56,27 @@ final class LoginAuthenticator extends AbstractFormLoginAuthenticator implements
     private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
+     * @var \Doctrine\Persistence\ManagerRegistry
+     */
+    private ManagerRegistry $managerRegistry;
+
+    /**
      * LoginAuthenticator constructor.
      *
+     * @param \Doctrine\Persistence\ManagerRegistry $managerRegistry
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator
      * @param \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface $csrfTokenManager
      * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(
+        ManagerRegistry $managerRegistry,
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
         UserPasswordEncoderInterface $passwordEncoder
     ) {
+        $this->managerRegistry = $managerRegistry;
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -119,8 +128,8 @@ final class LoginAuthenticator extends AbstractFormLoginAuthenticator implements
             throw new InvalidCsrfTokenException();
         }
 
-        /** @var UserInterface $user */
-        $user = $this->entityManager
+        $user = $this->managerRegistry
+            ->getManager('default')
             ->getRepository(User::class)
             ->findOneBy(
                 [
