@@ -35,6 +35,7 @@ final class OrderRepository extends EntityRepository implements OrderRepositoryI
     {
         return $this->createQueryBuilder('p')
             ->select(['p'])
+            ->orderBy('p.orderTime', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getQuery()

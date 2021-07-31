@@ -24,6 +24,7 @@
 
 namespace App\Entity\Shopware;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelEntity;
@@ -233,6 +234,25 @@ class Customer
     private $birthday;
 
     /**
+     * INVERSE SIDE
+     * The orders property is the inverse side of the association between customer and orders.
+     * The association is joined over the customer id field and the userID field of the order.
+     *
+     * @var ArrayCollection<\App\Entity\Shopware\Order>
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Shopware\Order", mappedBy="customer")
+     */
+    protected $orders;
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getOrders(): ArrayCollection
+    {
+        return $this->orders;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -406,6 +426,18 @@ class Customer
     public function getBirthday(): string
     {
         return $this->formatDate($this->birthday, 'd-m-Y');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullname(): string
+    {
+        return printf('%s %s %s',
+            $this->getSalutation(),
+            $this->getFirstname(),
+            $this->getLastname()
+        );
     }
 
     /**

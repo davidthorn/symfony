@@ -34,6 +34,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Order
 {
     /**
+     * @return \App\Entity\Shopware\Customer
+     */
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @var \App\Entity\Shopware\Customer
+     *
+     * @ORM\ManyToOne(targetEntity="\App\Entity\Shopware\Customer", inversedBy="orders")
+     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     */
+    protected Customer $customer;
+
+    /**
      * Unique identifier field.
      *
      * @var int

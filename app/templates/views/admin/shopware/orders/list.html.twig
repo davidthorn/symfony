@@ -5,9 +5,10 @@
     <table class="table mt-3">
         <thead>
         <tr>
-            <th scope="col">#</th>
+{#            <th scope="col">#</th>#}
             <th scope="col">Order Number</th>
-            <th scope="col">User ID</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Customer Email</th>
             <th scope="col">Order Time</th>
             <th scope="col">Invoice Amount</th>
         </tr>
@@ -15,9 +16,10 @@
         <tbody>
         {% for index, model in models %}
             <tr>
-                <th scope="row">{{ model.id }}</th>
+{#                <th scope="row">{{ model.id }}</th>#}
                 <td>{{ model.number }}</td>
-                <td>{{ model.customerId }}</td>
+                <td>{{ model.customer.fullname }}</td>
+                <td>{{ model.customer.email }}</td>
                 <td>{{ model.ordertime }}</td>
                 <td>{{ model.invoiceAmount }}</td>
             </tr>
