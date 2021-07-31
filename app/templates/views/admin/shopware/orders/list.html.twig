@@ -1,0 +1,27 @@
+{% extends 'views/admin/base.html.twig' %}
+
+{% block admin_content %}
+    <h3>Orders</h3>
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Order Number</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Order Time</th>
+            <th scope="col">Invoice Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for index, model in models %}
+            <tr>
+                <th scope="row">{{ model.id }}</th>
+                <td>{{ model.number }}</td>
+                <td>{{ model.customerId }}</td>
+                <td>{{ model.ordertime }}</td>
+                <td>{{ model.invoiceAmount }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
