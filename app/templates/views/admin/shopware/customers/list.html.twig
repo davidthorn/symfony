@@ -6,20 +6,21 @@
         <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">Salutation</th>
             <th scope="col">First name</th>
             <th scope="col">Surname</th>
             <th scope="col">Email</th>
-            <th scope="col">Salutation</th>
+
         </tr>
         </thead>
         <tbody>
         {% for index, model in models %}
             <tr>
                 <th scope="row">{{ model.id }}</th>
+                <td>{{ model.salutation }}</td>
                 <td>{{ model.firstname }}</td>
                 <td>{{ model.lastname }}</td>
                 <td>{{ model.email }}</td>
-                <td>{{ model.salutation }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,33 +1,12 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 namespace App\Entity\Shopware;
 
-use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
 
 /**
  * @ORM\Entity(repositoryClass="CustomerRepository::class")
@@ -40,19 +19,11 @@ class Customer
      * The orders property is the inverse side of the association between customer and orders.
      * The association is joined over the customer id field and the userID field of the order.
      *
-     * @var ArrayCollection<\App\Entity\Shopware\Order>
+     * @var \Doctrine\ORM\PersistentCollection<\App\Entity\Shopware\Order>
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Shopware\Order", mappedBy="customer")
      */
-    protected $orders;
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getOrders(): ArrayCollection
-    {
-        return $this->orders;
-    }
+    protected PersistentCollection $orders;
 
     /**
      * The id property is an identifier property which means
@@ -64,7 +35,7 @@ class Customer
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
      * Contains the customer email address which is used to send the order confirmation mail
@@ -76,7 +47,7 @@ class Customer
      * @Assert\NotBlank()
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */
-    private $email;
+    private string $email;
 
     /**
      * @var string
@@ -85,14 +56,14 @@ class Customer
      *
      * @ORM\Column(name="salutation", type="text", nullable=false)
      */
-    private $salutation;
+    private string $salutation;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    private $title;
+    private string $title;
 
     /**
      * @var string
@@ -100,7 +71,7 @@ class Customer
      * @Assert\NotBlank()
      * @ORM\Column(name="firstname", type="text", nullable=false)
      */
-    private $firstname;
+    private string $firstname;
 
     /**
      * @var string
@@ -108,7 +79,7 @@ class Customer
      * @Assert\NotBlank()
      * @ORM\Column(name="lastname", type="text", nullable=false)
      */
-    private $lastname;
+    private string $lastname;
 
     /**
      * @return int
@@ -136,7 +107,8 @@ class Customer
             'mrs' => 'Mrs',
             'miss' => 'Miss',
             'ms' => 'Ms',
-            default => 'Unknown'
+            'none' => 'None Provided',
+            default => $this->salutation
         };
     }
 
@@ -177,12 +149,20 @@ class Customer
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getOrders(): ArrayCollection
+    {
+        return $this->orders;
+    }
+
+    /**
      * @param \DateTimeInterface $date
      * @param string $defaultFormat
      *
      * @return string
      */
-    private function formatDate(\DateTimeInterface $date, string $defaultFormat = 'd-m-Y H:i:s'): string
+    private function formatDate(DateTimeInterface $date, string $defaultFormat = 'd-m-Y H:i:s'): string
     {
         return $date->format($defaultFormat);
     }
