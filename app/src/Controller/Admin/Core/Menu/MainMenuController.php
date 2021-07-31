@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin\Menu;
+namespace App\Controller\Admin\Core\Menu;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,12 +48,16 @@ final class MainMenuController extends AbstractController
                     'title' => 'Home'
                 ],
                 [
-                    'link' => $this->generateUrl('app_admin_shopware_articles_list'),
+                    'link' => $this->generateUrl('app_shopware_articles_list'),
                     'title' => 'Articles'
                 ],
                 [
-                    'link' => $this->generateUrl('app_admin_shopware_orders_list'),
+                    'link' => $this->generateUrl('app_shopware_orders_list'),
                     'title' => 'Orders'
+                ],
+                [
+                    'link' => $this->generateUrl('app_shopware_customers_list'),
+                    'title' => 'Customers'
                 ],
                 [
                     'link' => $this->generateUrl('app_admin_menus_list'),

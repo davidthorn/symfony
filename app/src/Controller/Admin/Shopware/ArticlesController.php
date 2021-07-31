@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/shopware", name="shopware_")
+ * @Route("/articles", name="articles_")
  */
 final class ArticlesController extends AbstractController
 {
@@ -27,7 +27,7 @@ final class ArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/articles", name="articles_list")
+     * @Route(name="list")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

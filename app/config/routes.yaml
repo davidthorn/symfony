@@ -21,7 +21,13 @@ auth:
   name_prefix: 'app_auth_'
 
 admin:
-  resource: '../src/Controller/Admin'
+  resource: '../src/Controller/Admin/Core'
   prefix: '/admin'
   type: annotation
   name_prefix: 'app_admin_'
+
+shopware:
+  resource: '../src/Controller/Admin/Shopware'
+  prefix: '/admin/shopware'
+  type: annotation
+  name_prefix: 'app_shopware_'

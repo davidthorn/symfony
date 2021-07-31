@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/shopware", name="shopware_")
+ * @Route("/orders", name="orders_")
  */
 final class OrdersController extends AbstractController
 {
@@ -26,7 +26,7 @@ final class OrdersController extends AbstractController
     }
 
     /**
-     * @Route("/orders", name="orders_list")
+     * @Route(name="list")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

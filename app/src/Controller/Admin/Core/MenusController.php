@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Core;
 
 use App\Entity\Menu;
 use App\Form\MenuCreateFormType;
