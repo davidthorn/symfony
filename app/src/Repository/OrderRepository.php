@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Shopware\Customer;
 use App\Entity\Shopware\Order;
 use App\Interfaces\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,10 +35,13 @@ final class OrderRepository extends EntityRepository implements OrderRepositoryI
     public function all(int $limit = 10, int $offset = 0): array
     {
         return $this->createQueryBuilder('p')
-            ->select(['p'])
-            ->orderBy('p.orderTime', 'DESC')
+            ->select('p, c', 'd')
+            ->innerJoin('p.customer', 'c')
+            ->innerJoin('p.details', 'd')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
+            ->where('p.status >= 0')
+            ->orderBy('p.orderTime', 'DESC')
             ->getQuery()
             ->getResult();
     }

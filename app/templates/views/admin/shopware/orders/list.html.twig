@@ -5,23 +5,31 @@
     <table class="table mt-3">
         <thead>
         <tr>
-{#            <th scope="col">#</th>#}
-            <th scope="col">Order Number</th>
-            <th scope="col">Customer</th>
+            <th scope="col" width="170px">Order Number</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Customer Name</th>
             <th scope="col">Customer Email</th>
             <th scope="col">Order Time</th>
-            <th scope="col">Invoice Amount</th>
+            <th scope="col">Status</th>
+
+
         </tr>
         </thead>
         <tbody>
         {% for index, model in models %}
             <tr>
-{#                <th scope="row">{{ model.id }}</th>#}
                 <td>{{ model.number }}</td>
+                <td>
+                    <ul>
+                    {% for detail in model.details %}
+                        <li>{{ detail.articleName }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
                 <td>{{ model.customer.fullname }}</td>
                 <td>{{ model.customer.email }}</td>
-                <td>{{ model.ordertime }}</td>
-                <td>{{ model.invoiceAmount }}</td>
+                <td>{{ model.orderTime }}</td>
+                <td>{{ model.status }}</td>
             </tr>
         {% endfor %}
         </tbody>
