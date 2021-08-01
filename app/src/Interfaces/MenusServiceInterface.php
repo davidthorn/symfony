@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-use App\Entity\Menu;
+use App\Entity\Core\Menu;
 use App\Services\MenusService;
 
 /**
@@ -22,7 +22,7 @@ interface MenusServiceInterface
     /**
      * Returns all Menus that are persisted.
      *
-     * @return \App\Entity\Menu[]
+     * @return \App\Entity\Core\Menu[]
      */
     public function all(): array;
 
@@ -37,7 +37,7 @@ interface MenusServiceInterface
     /**
      * Persists the menu.
      *
-     * @param \App\Entity\Menu $menu
+     * @param \App\Entity\Core\Menu $menu
      *
      * @return void
      */
@@ -48,7 +48,7 @@ interface MenusServiceInterface
      *
      * @param int $menu_id
      *
-     * @return \App\Entity\Menu|null
+     * @return \App\Entity\Core\Menu|null
      */
     public function get(int $menu_id): ?Menu;
 

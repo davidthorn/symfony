@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Entity\Menu;
+use App\Entity\Core\Menu;
 use App\Interfaces\MenuRepositoryInterface;
 use App\Interfaces\MenusServiceInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -55,7 +55,7 @@ final class MenusService implements MenusServiceInterface
     }
 
     /**
-     * @return \App\Entity\Menu[]
+     * @return \App\Entity\Core\Menu[]
      */
     public function all(): array
     {
@@ -65,7 +65,7 @@ final class MenusService implements MenusServiceInterface
     /**
      * @param int $menu_id
      *
-     * @return \App\Entity\Menu|null
+     * @return \App\Entity\Core\Menu|null
      */
     public function get(int $menu_id): ?Menu
     {
@@ -81,7 +81,7 @@ final class MenusService implements MenusServiceInterface
     }
 
     /**
-     * @param \App\Entity\Menu $menu
+     * @param \App\Entity\Core\Menu $menu
      */
     public function save(Menu $menu): void
     {

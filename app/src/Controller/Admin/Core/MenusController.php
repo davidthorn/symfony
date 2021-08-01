@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin\Core;
 
-use App\Entity\Menu;
+use App\Entity\Core\Menu;
 use App\Form\MenuCreateFormType;
 use App\Interfaces\MenusServiceInterface;
 use App\Security\Roles;
@@ -98,7 +98,7 @@ final class MenusController extends AbstractController
     }
 
     /**
-     * @param \App\Entity\Menu $menu
+     * @param \App\Entity\Core\Menu $menu
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $method
      *

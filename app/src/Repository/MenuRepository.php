@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Menu;
+use App\Entity\Core\Menu;
 use App\Interfaces\MenuRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +32,7 @@ final class MenuRepository extends ServiceEntityRepository implements MenuReposi
     }
 
     /**
-     * @return \App\Entity\Menu[]
+     * @return \App\Entity\Core\Menu[]
      */
     public function all(): array
     {
@@ -42,7 +42,7 @@ final class MenuRepository extends ServiceEntityRepository implements MenuReposi
     /**
      * @param int $menu_id
      *
-     * @return \App\Entity\Menu|null
+     * @return \App\Entity\Core\Menu|null
      */
     public function get(int $menu_id): ?Menu
     {
@@ -62,7 +62,7 @@ final class MenuRepository extends ServiceEntityRepository implements MenuReposi
     /**
      * Persists the menu.
      *
-     * @param \App\Entity\Menu $menu
+     * @param \App\Entity\Core\Menu $menu
      *
      * @return void
      */

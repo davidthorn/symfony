@@ -32,7 +32,7 @@ final class OrdersController extends AbstractController
      */
     public function indexAction(): Response
     {
-        $all = $this->ordersRepository->all(200, 0);
+        $all = $this->ordersRepository->all(10, 0);
         return $this->render('views/admin/shopware/orders/list.html.twig', [
             'models' => $all
         ]);

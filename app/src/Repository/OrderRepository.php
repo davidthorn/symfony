@@ -41,7 +41,7 @@ final class OrderRepository extends EntityRepository implements OrderRepositoryI
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->where('p.status >= 1')
-//            ->andWhere("p.orderTime >= '2021-07-24 08:00'")
+            ->andWhere("p.orderTime >= '2021-07-24 08:00'")
             ->andWhere("c.email not like '%sp47.de'")
             ->orderBy('p.orderTime', 'DESC')
             ->groupBy('p.number, c.email')
