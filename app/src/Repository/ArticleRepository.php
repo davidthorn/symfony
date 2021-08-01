@@ -16,11 +16,11 @@ use Doctrine\ORM\EntityRepository;
 final class ArticleRepository extends EntityRepository implements  ArticleRepositoryInterface
 {
     /**
-     * @param \Doctrine\ORM\EntityManagerInterface $shopwareEntityManager
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $shopwareEntityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($shopwareEntityManager, $shopwareEntityManager->getClassMetadata(Article::class));
+        parent::__construct($entityManager, $entityManager->getClassMetadata(Article::class));
     }
 
     /**

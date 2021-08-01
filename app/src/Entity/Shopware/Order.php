@@ -22,6 +22,14 @@ class Order
     protected Customer $customer;
 
     /**
+     * @param \App\Entity\Shopware\Customer $customer
+     */
+    public function setCustomer(Customer $customer): void
+    {
+        $this->customer = $customer;
+    }
+
+    /**
      * INVERSE SIDE
      *
      * @var \Doctrine\ORM\PersistentCollection<\App\Entity\Shopware\OrderDetail>
@@ -125,5 +133,50 @@ class Order
     public function getCustomer(): Customer
     {
         return $this->customer;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @param int $customerId
+     */
+    public function setCustomerId(int $customerId): void
+    {
+        $this->customerId = $customerId;
+    }
+
+    public function getUserID(): int
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param string|null $number
+     */
+    public function setNumber(?string $number): void
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @param \DateTimeInterface $orderTime
+     */
+    public function setOrderTime(DateTimeInterface $orderTime): void
+    {
+        $this->orderTime = $orderTime;
     }
 }

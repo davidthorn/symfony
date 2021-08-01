@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Shopware\Customer;
 use App\Entity\Shopware\Order;
 use App\Interfaces\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,11 +16,11 @@ use Doctrine\ORM\EntityRepository;
 final class OrderRepository extends EntityRepository implements OrderRepositoryInterface
 {
     /**
-     * @param \Doctrine\ORM\EntityManagerInterface $shopwareEntityManager
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $shopwareEntityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($shopwareEntityManager, $shopwareEntityManager->getClassMetadata(Order::class));
+        parent::__construct($entityManager, $entityManager->getClassMetadata(Order::class));
     }
 
     /**
@@ -44,7 +43,7 @@ final class OrderRepository extends EntityRepository implements OrderRepositoryI
             ->andWhere("p.orderTime >= '2021-07-24 08:00'")
             ->andWhere("c.email not like '%sp47.de'")
             ->orderBy('p.orderTime', 'DESC')
-            ->groupBy('p.number, c.email')
+//            ->groupBy('p.number')
             ->getQuery()
             ->getResult();
     }

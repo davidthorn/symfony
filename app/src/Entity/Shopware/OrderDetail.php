@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="s_order_details")
  * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
  */
 class OrderDetail
 {
@@ -20,6 +19,14 @@ class OrderDetail
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      */
     protected Order $order;
+
+    /**
+     * @param \App\Entity\Shopware\Order $order
+     */
+    public function setOrder(Order $order): void
+    {
+        $this->order = $order;
+    }
 
     /**
      * @var int
@@ -341,5 +348,157 @@ class OrderDetail
     public function getPackUnit(): ?string
     {
         return $this->packUnit;
+    }
+
+    /**
+     * @param int $orderId
+     */
+    public function setOrderId(int $orderId): void
+    {
+        $this->orderId = $orderId;
+    }
+
+    /**
+     * @param int $articleId
+     */
+    public function setArticleId(int $articleId): void
+    {
+        $this->articleId = $articleId;
+    }
+
+    /**
+     * @param int $taxId
+     */
+    public function setTaxId(int $taxId): void
+    {
+        $this->taxId = $taxId;
+    }
+
+    /**
+     * @param float $taxRate
+     */
+    public function setTaxRate(float $taxRate): void
+    {
+        $this->taxRate = $taxRate;
+    }
+
+    /**
+     * @param int $statusId
+     */
+    public function setStatusId(int $statusId): void
+    {
+        $this->statusId = $statusId;
+    }
+
+    /**
+     * @param int|null $articleDetailID
+     */
+    public function setArticleDetailID(?int $articleDetailID): void
+    {
+        $this->articleDetailID = $articleDetailID;
+    }
+
+    /**
+     * @param string|null $number
+     */
+    public function setNumber(?string $number): void
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @param string $articleNumber
+     */
+    public function setArticleNumber(string $articleNumber): void
+    {
+        $this->articleNumber = $articleNumber;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity(int $quantity): void
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @param string $articleName
+     */
+    public function setArticleName(string $articleName): void
+    {
+        $this->articleName = $articleName;
+    }
+
+    /**
+     * @param int $shipped
+     */
+    public function setShipped(int $shipped): void
+    {
+        $this->shipped = $shipped;
+    }
+
+    /**
+     * @param int $shippedGroup
+     */
+    public function setShippedGroup(int $shippedGroup): void
+    {
+        $this->shippedGroup = $shippedGroup;
+    }
+
+    /**
+     * @param int $mode
+     */
+    public function setMode(int $mode): void
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @param int $esdArticle
+     */
+    public function setEsdArticle(int $esdArticle): void
+    {
+        $this->esdArticle = $esdArticle;
+    }
+
+    /**
+     * @param string $config
+     */
+    public function setConfig(string $config): void
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @param string|null $ean
+     */
+    public function setEan(?string $ean): void
+    {
+        $this->ean = $ean;
+    }
+
+    /**
+     * @param string|null $unit
+     */
+    public function setUnit(?string $unit): void
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @param string|null $packUnit
+     */
+    public function setPackUnit(?string $packUnit): void
+    {
+        $this->packUnit = $packUnit;
     }
 }
