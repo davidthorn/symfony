@@ -32,16 +32,19 @@ final class OrderRepository extends EntityRepository implements OrderRepositoryI
      *
      * @return array
      */
-    public function all(int $limit = 10, int $offset = 0): array
+    public function all(int $limit = 50, int $offset = 0): array
     {
         return $this->createQueryBuilder('p')
-            ->select('p, c', 'd')
+            ->select('p, c, d')
             ->innerJoin('p.customer', 'c')
             ->innerJoin('p.details', 'd')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
-            ->where('p.status >= 0')
+            ->where('p.status >= 1')
+//            ->andWhere("p.orderTime >= '2021-07-24 08:00'")
+            ->andWhere("c.email not like '%sp47.de'")
             ->orderBy('p.orderTime', 'DESC')
+            ->groupBy('p.number, c.email')
             ->getQuery()
             ->getResult();
     }
