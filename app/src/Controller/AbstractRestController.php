@@ -72,6 +72,23 @@ abstract class AbstractRestController extends AbstractFOSRestController
      * @param int $id
      * @return Response
      */
+    public function item(int $id): Response
+    {
+        $item = $this->loadEntity($id);
+
+        if (!$item) {
+            throw new NotFoundHttpException('The item does not exist');
+        }
+
+        $view = $this->view($item, Response::HTTP_OK, []);
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     */
     public function update(int $id): Response
     {
         $item = $this->loadEntity($id);

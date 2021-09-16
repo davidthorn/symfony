@@ -1,19 +1,23 @@
-#shopping_list_get:
-#    path: /api/shopping/list
-#    methods: GET
-#    controller: App\Controller\ShoppingListRestController::index
-#
-#shopping_list_post:
-#    path: /api/shopping/list
-#    methods: POST
-#    controller: App\Controller\ShoppingListRestController::create
-#
-#shopping_list_put:
-#    path: /api/shopping/list/{id}
-#    methods: [PUT]
-#    controller: App\Controller\ShoppingListRestController::update
-#
-#shopping_list_delete:
-#    path: /api/shopping/list/{id}
-#    methods: [DELETE]
-#    controller: App\Controller\ShoppingListRestController::delete
+basic_info_get:
+    path: /api/basic/info/{id}
+    methods: GET
+    controller: App\Controller\BasicInfoController::item
+
+basic_info_list:
+    path: /api/basic/info
+    methods: GET
+    controller: App\Controller\BasicInfoController::index
+
+basic_info_post:
+    path: /api/basic/info
+    methods: POST
+    controller: App\Controller\BasicInfoController::create
+
+basic_info_put:
+    path: /api/basic/info/{id}
+    methods: [PUT]
+    controller: App\Controller\BasicInfoController::update
+basic_info_delete:
+    path: /api/basic/info/{id}
+    methods: [DELETE]
+    controller: App\Controller\BasicInfoController::delete
