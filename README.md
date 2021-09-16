@@ -1,5 +1,7 @@
 # Symfony Skeleton - Docker
 
+> THIS README IS OUTDATED AND I NEED TO UPDATE IT
+
 The build,install scripts install a [symfony/website-skeleton](https://github.com/symfony/website-skeleton) application into the app folder and then install some custom packages that can be used to create a website/api.
 
 The symfony project will be serve its website pages, using nginx, and also save all of its data into a mysql server. 
