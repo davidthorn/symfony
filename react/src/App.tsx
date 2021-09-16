@@ -1,61 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Home from "./Pages/Home";
 
+/**
+ *
+ */
 interface Props {
-}
-
-interface State {
-    name: string
-    surname: string
+    endpointUrl: string
 }
 
 /**
  *
  */
-class App extends React.Component<Props, State> {
-
-    /**
-     *
-     * @param props
-     */
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            name: 'React',
-            surname: 'App'
-        }
-    }
+class App extends React.Component<Props> {
 
     /**
      *
      */
-    async componentDidMount() {
-        const result = await fetch('http://web.localhost:8080/api/basic/info/1').then(j => j.json());
-        this.setState({
-            name: result.name,
-            surname: result.surname
-        })
-    }
-
     render() {
+
+        // TODO: Add routing logic here.
+        // The app should be thought as the base.html.twig file that
+        // controls the which content is displayed.
+        // per default the Home page will be displayed.
         return (
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <p>
-                        {this.state.name} {this.state.surname} Yes....
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                </header>
-            </div>
+            <Home endpointUrl={this.props.endpointUrl}></Home>
         )
     }
 }

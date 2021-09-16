@@ -4,9 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+//
+const endpointUrl = 'http://web.localhost:8080';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App endpointUrl={endpointUrl} />
   </React.StrictMode>,
   document.getElementById('root')
 );
