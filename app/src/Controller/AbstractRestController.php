@@ -68,6 +68,11 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * The method should be used for all rest resources that extend this class.
+     * This method will handle all rest related requests for the entity and form defined in the
+     * abstract methods.
+     * The other help methods should be used to manipulate the response or entity etc.
+     *
      * @throws HttpRequestMethodException
      */
     public function entryPoint(): Response
@@ -130,13 +135,8 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function item(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
+        $this->didLoadEntity($item);
         $view = $this->view($item, Response::HTTP_OK, []);
-
         return $this->willSendResponse($this->handleView($view));
     }
 
@@ -148,11 +148,7 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function update(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
+        $this->didLoadEntity($item);
         return $this->handleForm($item);
     }
 
@@ -163,11 +159,6 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function delete(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
         $entity = $this->willRemoveEntity($item);
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
@@ -257,12 +248,33 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * Must return an entity that has the matching id.
+     * This method should be overridden if any changes are needed to be made to the entity
+     * prior to it being used for the request.
+     *
      * @param int $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function loadEntity(int $id): mixed
     {
-        return $this->getRepository()->find($id);
+        $entity = $this->getRepository()->find($id);
+
+        if (!$entity) {
+            $message = sprintf('The entity: %s with id %d does not exist', $this->getEntityType(), $id);
+            throw new NotFoundHttpException($message);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Called directly after the loadEntity method has successfully returned an entity from the database.
+     *
+     * @param mixed $entity
+     */
+    public function didLoadEntity(mixed $entity) {
+        // Override this method if any changes should be made to the entity.
     }
 
     /**
@@ -281,6 +293,9 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * Returns an entity that does not exist in the database.
+     * This entity will be used for all POST requests, or simply said only when a new entity is being created.
+     *
      * @return mixed
      */
     public function createEntity(): mixed
