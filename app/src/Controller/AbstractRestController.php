@@ -5,11 +5,15 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\View;
+use HttpRequestMethodException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -17,6 +21,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 abstract class AbstractRestController extends AbstractFOSRestController
 {
+    /**
+     * The alias used for all query builders aliases.
+     */
+    public const ENTITY_ALIAS = 'entity';
+
     /**
      * @var EntityManagerInterface
      */
@@ -52,15 +61,61 @@ abstract class AbstractRestController extends AbstractFOSRestController
     abstract public function getRepository(): ObjectRepository;
 
     /**
+     * @return Request
+     */
+    public function getRequest(): Request {
+        return $this->request;
+    }
+
+    /**
+     * @throws HttpRequestMethodException
+     */
+    public function entryPoint(): Response
+    {
+        try {
+            $method = $this->request->getMethod();
+            $id = $this->request->attributes->get('id');
+
+            return match ($method) {
+                Request::METHOD_GET => $id === null ? $this->index() : $this->forceIdExists('item'),
+                Request::METHOD_POST => $this->create(),
+                Request::METHOD_PUT => $this->forceIdExists('update'),
+                Request::METHOD_DELETE => $this->forceIdExists('delete'),
+                default => throw new HttpRequestMethodException(),
+            };
+        } catch(Exception $exception) {
+            $this->didThrownException($exception);
+            throw $exception;
+        }
+    }
+
+    /**
+     * @param string $method
+     * @return Response
+     */
+    private function forceIdExists(string $method): Response {
+        $id = $this->request->attributes->get('id');
+        $id = empty($id) ? null: $id;
+
+        if($id === null) {
+            throw new BadRequestHttpException('An id attribute is required for this request.');
+        }
+
+        return $this->{$method}($id);
+    }
+
+
+    /**
      * @return Response
      */
     public function index(): Response
     {
-        return $this->json($this->all());
+        return $this->willSendResponse($this->json($this->all()));
     }
 
     /**
      * @return Response
+     * @throws Exception
      */
     public function create(): Response
     {
@@ -82,12 +137,13 @@ abstract class AbstractRestController extends AbstractFOSRestController
 
         $view = $this->view($item, Response::HTTP_OK, []);
 
-        return $this->handleView($view);
+        return $this->willSendResponse($this->handleView($view));
     }
 
     /**
      * @param int $id
      * @return Response
+     * @throws Exception
      */
     public function update(int $id): Response
     {
@@ -155,10 +211,16 @@ abstract class AbstractRestController extends AbstractFOSRestController
     /**
      * @param FormInterface $form
      * @return bool
+     * @throws Exception
      */
     public function hasErrors(FormInterface $form): bool
     {
-        $form->submit($this->request->request->all());
+        $preCheck = $this->request->request->all();
+        $bodyParams = $this->willSubmitForm($preCheck);
+        if($preCheck !== $this->request->request->all()) {
+            throw new Exception('The will submit form should not make changes to the request');
+        }
+        $form->submit($bodyParams);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return true;
@@ -186,8 +248,12 @@ abstract class AbstractRestController extends AbstractFOSRestController
      */
     public function response(FormInterface $form, int $statusCode = Response::HTTP_OK, array $headers = []): Response
     {
-        $view = $this->view($form->getData(), $statusCode, $headers);
-        return $this->handleView($view);
+        $view = $this->view($form->getData());
+        $response = $this->handleView($view);
+        // Updated status code and headers here to circumvent what fos people think status codes should be.
+        $response->setStatusCode($statusCode);
+        $response->headers->add($headers);
+        return $this->willSendResponse($response);
     }
 
     /**
@@ -211,7 +277,7 @@ abstract class AbstractRestController extends AbstractFOSRestController
      * @return string
      */
     public function queryAlias(): string {
-        return 'entity';
+        return self::ENTITY_ALIAS;
     }
 
     /**
@@ -225,19 +291,25 @@ abstract class AbstractRestController extends AbstractFOSRestController
 
     /**
      * @param mixed $entity
+     * @param int $statusCode
+     * @param array $headers
      * @return Response
+     * @throws Exception
      */
-    public function handleForm(mixed $entity): Response
+    public function handleForm(mixed $entity, int $statusCode = Response::HTTP_OK, array $headers = []): Response
     {
         $form = $this->buildForm($entity);
 
         if ($this->hasErrors($form)) {
-            return $this->handleView($this->view($form));
+            $response = $this->handleView($this->view($form));
+            $response->headers->add($headers);
+            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->willSendResponse($response);
         }
 
         $this->persistForm($form);
 
-        return $this->response($form);
+        return $this->willSendResponse($this->response($form, $statusCode, $headers));
     }
 
     /**
@@ -276,5 +348,31 @@ abstract class AbstractRestController extends AbstractFOSRestController
      */
     public function didPersistEntity(mixed $entity) {
         // Method should be overridden to view the state of the entity after being persisted.
+    }
+
+    /**
+     * @param Response $response
+     * @return Response
+     */
+    public function willSendResponse(Response $response): Response {
+        return $response;
+    }
+
+    /**
+     * Called immediately prior to the form being submitted using the requests body.
+     */
+    public function willSubmitForm(array $bodyParams): array {
+        // Add, remove or update any request body params that will be submitted in the form.
+        return $bodyParams;
+    }
+
+    /**
+     * Called immediately after an exception has been thrown during the creation of a response.
+     * This method is the sad-case for willSendResponse.
+     *
+     * @param mixed $exception
+     */
+    public function didThrownException(mixed $exception) {
+        // Use this method to handle or log any exceptions.
     }
 }

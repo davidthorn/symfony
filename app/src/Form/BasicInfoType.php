@@ -31,7 +31,7 @@ class BasicInfoType extends AbstractType
             ->add('surname', TextType::class, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'The name field cannot be empty'
+                        'message' => 'The surname field cannot be empty'
                     ])
                 ]
             ])
