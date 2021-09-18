@@ -1,18 +1,36 @@
 monolog:
+    channels: ["rest"]
     handlers:
-        main:
+        cache:
             type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            path: "%kernel.logs_dir%/%kernel.environment%.cache.log"
             level: debug
-            channels: ["!event"]
-        # uncomment to get logging in your browser
-        # you may have to allow bigger header sizes in your Web server configuration
-        #firephp:
-        #    type: firephp
-        #    level: info
-        #chromephp:
-        #    type: chromephp
-        #    level: info
+            channels: [ "cache" ]
+        security:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.security.log"
+            level: debug
+            channels: [ "security" ]
+        router:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.router.log"
+            level: debug
+            channels: [ "router" ]
+        doctrine:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.doctrine.log"
+            level: debug
+            channels: [ "doctrine" ]
+        request:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.request.log"
+            level: debug
+            channels: ["request"]
+        rest:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.rest.log"
+            level: debug
+            channels: [ "rest" ]
         console:
             type: console
             process_psr_3_messages: false

@@ -9,6 +9,7 @@ use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use HttpRequestMethodException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,13 +37,19 @@ abstract class AbstractRestController extends AbstractFOSRestController
     private Request $request;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param RequestStack $requestStack
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager, LoggerInterface $restLogger)
     {
         $this->entityManager = $entityManager;
         $this->request = $requestStack->getCurrentRequest();
+        $this->logger = $restLogger;
     }
 
     /**
@@ -77,10 +84,16 @@ abstract class AbstractRestController extends AbstractFOSRestController
      */
     public function entryPoint(): Response
     {
-        try {
-            $method = $this->request->getMethod();
-            $id = $this->request->attributes->get('id');
+        $method = $this->request->getMethod();
+        $id = $this->request->attributes->get('id');
 
+        $this->logger->debug(sprintf('Request: %s %s id = %s',
+            $this->request->getRequestUri(),
+            $method,
+            $id ?? 'null'
+        ));
+
+        try {
             return match ($method) {
                 Request::METHOD_GET => $id === null ? $this->index() : $this->forceIdExists('item'),
                 Request::METHOD_POST => $this->create(),
@@ -89,6 +102,12 @@ abstract class AbstractRestController extends AbstractFOSRestController
                 default => throw new HttpRequestMethodException(),
             };
         } catch(Exception $exception) {
+            $this->logger->error(sprintf('Exception: %s %s id = %s - error: %s',
+                $this->request->getRequestUri(),
+                $method,
+                $id ?? 'null',
+                $exception->getMessage()
+            ));
             $this->didThrownException($exception);
             throw $exception;
         }
