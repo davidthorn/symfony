@@ -9,6 +9,7 @@ use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use HttpRequestMethodException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,13 +37,19 @@ abstract class AbstractRestController extends AbstractFOSRestController
     private Request $request;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param RequestStack $requestStack
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager, LoggerInterface $restLogger)
     {
         $this->entityManager = $entityManager;
         $this->request = $requestStack->getCurrentRequest();
+        $this->logger = $restLogger;
     }
 
     /**
@@ -68,14 +75,25 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * The method should be used for all rest resources that extend this class.
+     * This method will handle all rest related requests for the entity and form defined in the
+     * abstract methods.
+     * The other help methods should be used to manipulate the response or entity etc.
+     *
      * @throws HttpRequestMethodException
      */
     public function entryPoint(): Response
     {
-        try {
-            $method = $this->request->getMethod();
-            $id = $this->request->attributes->get('id');
+        $method = $this->request->getMethod();
+        $id = $this->request->attributes->get('id');
 
+        $this->logger->debug(sprintf('Request: %s %s id = %s',
+            $this->request->getRequestUri(),
+            $method,
+            $id ?? 'null'
+        ));
+
+        try {
             return match ($method) {
                 Request::METHOD_GET => $id === null ? $this->index() : $this->forceIdExists('item'),
                 Request::METHOD_POST => $this->create(),
@@ -84,6 +102,12 @@ abstract class AbstractRestController extends AbstractFOSRestController
                 default => throw new HttpRequestMethodException(),
             };
         } catch(Exception $exception) {
+            $this->logger->error(sprintf('Exception: %s %s id = %s - error: %s',
+                $this->request->getRequestUri(),
+                $method,
+                $id ?? 'null',
+                $exception->getMessage()
+            ));
             $this->didThrownException($exception);
             throw $exception;
         }
@@ -130,13 +154,8 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function item(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
+        $this->didLoadEntity($item);
         $view = $this->view($item, Response::HTTP_OK, []);
-
         return $this->willSendResponse($this->handleView($view));
     }
 
@@ -148,11 +167,7 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function update(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
+        $this->didLoadEntity($item);
         return $this->handleForm($item);
     }
 
@@ -163,11 +178,6 @@ abstract class AbstractRestController extends AbstractFOSRestController
     public function delete(int $id): Response
     {
         $item = $this->loadEntity($id);
-
-        if (!$item) {
-            throw new NotFoundHttpException('The item does not exist');
-        }
-
         $entity = $this->willRemoveEntity($item);
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
@@ -257,12 +267,33 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * Must return an entity that has the matching id.
+     * This method should be overridden if any changes are needed to be made to the entity
+     * prior to it being used for the request.
+     *
      * @param int $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function loadEntity(int $id): mixed
     {
-        return $this->getRepository()->find($id);
+        $entity = $this->getRepository()->find($id);
+
+        if (!$entity) {
+            $message = sprintf('The entity: %s with id %d does not exist', $this->getEntityType(), $id);
+            throw new NotFoundHttpException($message);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Called directly after the loadEntity method has successfully returned an entity from the database.
+     *
+     * @param mixed $entity
+     */
+    public function didLoadEntity(mixed $entity) {
+        // Override this method if any changes should be made to the entity.
     }
 
     /**
@@ -281,6 +312,9 @@ abstract class AbstractRestController extends AbstractFOSRestController
     }
 
     /**
+     * Returns an entity that does not exist in the database.
+     * This entity will be used for all POST requests, or simply said only when a new entity is being created.
+     *
      * @return mixed
      */
     public function createEntity(): mixed
