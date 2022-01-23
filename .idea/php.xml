@@ -2,7 +2,6 @@
 <project version="4">
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/app/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-mbstring" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-intl-grapheme" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/error-handler" />
@@ -32,11 +31,8 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/debug-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/filesystem" />
-      <path value="$PROJECT_DIR$/app/vendor/symfony/monolog-bridge" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/cache" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/translation-contracts" />
-      <path value="$PROJECT_DIR$/app/vendor/symfony/config" />
-      <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-php73" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-php80" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/dotenv" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/validator" />
@@ -109,13 +105,11 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/proxy-manager-bridge" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/property-info" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/security-core" />
-      <path value="$PROJECT_DIR$/app/vendor/symfony/mime" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/http-client" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/property-access" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/dom-crawler" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/web-link" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/css-selector" />
-      <path value="$PROJECT_DIR$/app/vendor/symfony/security-guard" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-intl-idn" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/security-csrf" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/options-resolver" />
@@ -136,6 +130,10 @@
       <path value="$PROJECT_DIR$/app/vendor/friendsofsymfony/rest-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/willdurand/negotiation" />
       <path value="$PROJECT_DIR$/app/vendor/willdurand/jsonp-callback-validator" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/monolog-bridge" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/mime" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
