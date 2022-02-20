@@ -110,7 +110,9 @@ abstract class AbstractRestController extends AbstractFOSRestController
      */
     public function index(): Response
     {
-        return $this->willSendResponse($this->json($this->all()));
+        $limit = $this->request->get('limit');
+        $offset = $this->request->get('offset');
+        return $this->willSendResponse($this->json($this->all($limit, $offset)));
     }
 
     /**
@@ -205,7 +207,7 @@ abstract class AbstractRestController extends AbstractFOSRestController
         $options['csrf_protection'] = false;
 
         /** @var FormInterface $form */
-        return $this->get('form.factory')->createNamed('', $this->getFormType(), $data, $options);
+        return $this->container->get('form.factory')->createNamed('', $this->getFormType(), $data, $options);
     }
 
     /**
