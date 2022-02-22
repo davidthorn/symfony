@@ -71,6 +71,8 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/intl" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/doctrine-fixtures-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/data-fixtures" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
